@@ -17,16 +17,27 @@ internal static class Program
         Console.WriteLine("Кол-во страницы для скачки..");
         var str = Console.ReadLine();
 
-        if (int.TryParse(str, out var pagesCount))
+        if (!int.TryParse(str, out var pagesCount))
         {
+            Console.WriteLine("Вы не указали кол-во страниц!");
+        }
+        else
+        {
+            Console.WriteLine("Вставьте ссылку на первую страницу чата игрока или оставьте поле пустым для скачки общего чата");
+            var chatPage = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(chatPage))
+            {
+                chatPage = ChatUrl;
+            }
+
             Console.WriteLine(Environment.NewLine);
-            LoadChat(pagesCount);
+            LoadChat(pagesCount, chatPage);
         }
 
         await Task.Delay(-1, cts.Token);
     }
 
-    private static void LoadChat(int pagesCount)
+    private static void LoadChat(int pagesCount, string chatFirstPage)
     {
         try
         {
